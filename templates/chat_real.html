@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js" integrity="sha512-NOfokbPf2bKbEVP3fB4H89Zg4zEXuO5CwKoBIRnYMPUtOkzhRN/uUr5VEzAFQSlHRDJFbw5CCfx6C47eqD6ZRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .chat-container { max-width: 600px; margin: 50px auto; }
+        #messages { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll; margin-bottom: 10px; }
+        #message-form { display: flex; }
+        #message-input { flex: 1; padding: 10px; border: 1px solid #ccc; }
+        #send-btn { padding: 10px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Real-Time Chat</h1>
+        <div id="messages"></div>
+        <form id="message-form">
+            <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off" />
+            <button id="send-btn" type="submit">Send</button>
+        </form>
+    </div>
+
+    <script>
+        // Initialize SocketIO
+        const socket = io();
+
+        // Listen for incoming messages
+        socket.on('message', function(msg) {
+            const messagesDiv = document.getElementById('messages');
+            const newMessage = document.createElement('p');
+            newMessage.textContent = msg;
+            messagesDiv.appendChild(newMessage);
+
+            // Scroll to the bottom of the messages
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        });
+
+        // Send a message when the form is submitted
+        const form = document.getElementById('message-form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('message-input');
+            const message = input.value;
+            if (message.trim()) {
+                socket.send(message); // Send the message to the server
+                input.value = ''; // Clear the input field
+            }
+        });
+    </script>
+</body>
+</html>

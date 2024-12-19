@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item List</title>
+</head>
+<body>
+    <h1>Item List</h1>
+    <a href="/add">Add New Item</a>
+    <ul>
+        {% for item in items %}
+        <li>
+            {{ item[1] }}
+            <a href="/update/{{ item[0] }}">Edit</a>
+            <a href="/delete/{{ item[0] }}" onclick="return confirm('Are you sure?')">Delete</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
